@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from a repository -->
     </parent>
     <groupId>com.pro</groupId>
-    <artifactId>discovery-server-service</artifactId>
+    <artifactId>config-server-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>discovery-server-service</name>
-    <description>discovery-server-service</description>
+    <name>config-server-service</name>
+    <description>config-server-service</description>
     <url/>
     <licenses>
         <license/>
@@ -37,17 +37,22 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
+            <artifactId>spring-cloud-config-server</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>net.i2p.crypto</groupId>
+                    <artifactId>eddsa</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.google.guava</groupId>
+                    <artifactId>guava</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.thoughtworks.xstream</groupId>
+                    <artifactId>xstream</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-webflux</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-actuator</artifactId>
-                </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -56,34 +61,27 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-test</artifactId>
-            <scope>test</scope>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
         </dependency>
-        <!-- 1) Bean Validation provider -->
         <dependency>
-            <groupId>org.hibernate.validator</groupId>
-            <artifactId>hibernate-validator</artifactId>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>32.1.2-jre</version>
+        </dependency>
+        <dependency>
+            <groupId>com.thoughtworks.xstream</groupId>
+            <artifactId>xstream</artifactId>
+            <version>1.4.21</version>
         </dependency>
 
     </dependencies>
+
     <dependencyManagement>
         <dependencies>
-            <!-- Override vulnerable httpclient -->
-            <dependency>
-                <groupId>org.apache.httpcomponents</groupId>
-                <artifactId>httpclient</artifactId>
-                <version>4.5.13</version>
-            </dependency>
-            <!-- Override vulnerable xstream -->
-            <dependency>
-                <groupId>com.thoughtworks.xstream</groupId>
-                <artifactId>xstream</artifactId>
-                <version>1.4.21</version>
-            </dependency>
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
@@ -119,31 +117,30 @@
                 </configuration>
             </plugin>
 
-                <!-- ... other plugins like spring-boot-maven-plugin, spotbugs ... -->
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-checkstyle-plugin</artifactId>
-                    <version>3.3.1</version> <!-- Use a recent version; 3.6.0 from your log seems unusual for this artifactId -->
-                    <configuration>
-                        <configLocation>checkstyle.xml</configLocation> <!-- Path to your checkstyle rules -->
-                        <suppressionsLocation>checkstyle-suppressions.xml</suppressionsLocation> <!-- Path to your suppression file -->
-                        <suppressionsFileExpression>checkstyle.suppressions.file</suppressionsFileExpression> <!-- Property for suppressions file -->
-                        <encoding>UTF-8</encoding>
-                        <consoleOutput>true</consoleOutput>
-                        <failsOnError>true</failsOnError>
-                        <linkXRef>false</linkXRef>
-                    </configuration>
-                    <executions>
-                        <execution>
-                            <id>validate</id>
-                            <phase>validate</phase>
-                            <goals>
-                                <goal>check</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
+            <!-- ... other plugins like spring-boot-maven-plugin, spotbugs ... -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>3.3.1</version> <!-- Use a recent version; 3.6.0 from your log seems unusual for this artifactId -->
+                <configuration>
+                    <configLocation>checkstyle.xml</configLocation> <!-- Path to your checkstyle rules -->
+                    <suppressionsLocation>checkstyle-suppressions.xml</suppressionsLocation> <!-- Path to your suppression file -->
+                    <suppressionsFileExpression>checkstyle.suppressions.file</suppressionsFileExpression> <!-- Property for suppressions file -->
 
+                    <consoleOutput>true</consoleOutput>
+                    <failsOnError>true</failsOnError>
+                    <linkXRef>false</linkXRef>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>validate</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
 
         </plugins>
     </build>
