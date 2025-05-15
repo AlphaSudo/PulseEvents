@@ -25,15 +25,21 @@ public class SecurityConfig {
      * @throws Exception If configuration fails.
      */
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(final HttpSecurity http)
+            throws Exception {
+
         http
-                // Disable CSRF protection - Eureka clients typically don't handle CSRF tokens
+                // Disable CSRF protection
+                // - Eureka clients typically don't handle CSRF tokens
                 .csrf(AbstractHttpConfigurer::disable)
                 // Configure authorization rules
                 .authorizeHttpRequests(authz -> authz
-                        .anyRequest().permitAll() // Allow all requests for local development
+                        // Allow all requests for local development
+                        .anyRequest().permitAll()
                 );
-        // HTTP Basic and session management are not strictly necessary when all requests are permitted.
+        // HTTP Basic and session management are not strictly necessary
+        // when all requests are permitted.
         return http.build();
     }
+
 }

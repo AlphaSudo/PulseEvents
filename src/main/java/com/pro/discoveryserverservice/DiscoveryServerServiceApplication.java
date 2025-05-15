@@ -10,6 +10,7 @@ import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
  */
 @SpringBootApplication
 @EnableEurekaServer
+// Suppress FinalClass for this specific class
 public class DiscoveryServerServiceApplication {
 
     /**
