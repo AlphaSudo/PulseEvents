@@ -4,11 +4,27 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
 
+/**
+ * Main application class for the Eureka Discovery Server.
+ * This class serves as the entry point for the Spring Boot application.
+ */
 @SpringBootApplication
 @EnableEurekaServer
 public class DiscoveryServerServiceApplication {
 
-    public static void main(String[] args) {
+    /**
+     * Private constructor to prevent instantiation of this utility class.
+     */
+    private DiscoveryServerServiceApplication() {
+        // Utility class
+    }
+
+    /**
+     * Main entry point for the Spring Boot application.
+     *
+     * @param args Command line arguments passed to the application.
+     */
+    public static void main(final String[] args) {
         SpringApplication.run(DiscoveryServerServiceApplication.class, args);
     }
 

@@ -17,7 +17,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource(properties = {
         "management.info.env.enabled=true",
-        "logging.level.org.springframework.boot.actuate.info=DEBUG"
+        "logging.level.org.springframework.boot.actuate.info=DEBUG",
+        "info.app.name=discovery-server-service",
+        "info.app.description=Eureka Discovery Server (Local Development Setup)"
 })
 public class EurekaServerIntegrationTests {
 
@@ -55,8 +57,8 @@ public class EurekaServerIntegrationTests {
     @DisplayName("Health actuator endpoint is accessible and shows UP status")
     @SuppressWarnings("unchecked")
     void healthActuatorEndpointIsUp() {
-        ResponseEntity<Map> response = this.restTemplate.getForEntity(
-                "http://localhost:" + port + "/actuator/health", Map.class);
+        ResponseEntity<Map<String, Object>> response = this.restTemplate.getForEntity(
+                "http://localhost:" + port + "/actuator/health", (Class<Map<String, Object>>)(Class<?>)Map.class);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody()).isNotNull();
@@ -67,8 +69,8 @@ public class EurekaServerIntegrationTests {
     @DisplayName("Info actuator endpoint is accessible and contains application name")
     @SuppressWarnings("unchecked")
     void infoActuatorEndpointContainsAppName() {
-        ResponseEntity<Map> response = this.restTemplate.getForEntity(
-                "http://localhost:" + port + "/actuator/info", Map.class);
+        ResponseEntity<Map<String, Object>> response = this.restTemplate.getForEntity(
+                "http://localhost:" + port + "/actuator/info", (Class<Map<String, Object>>)(Class<?>)Map.class);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody()).isNotNull();
@@ -90,7 +92,7 @@ public class EurekaServerIntegrationTests {
     }
 
 
-    // You could add more tests here, for example:
+    // You could add more tests here, for example,
     // - Test specific Eureka server behaviors if you had more complex configurations.
     // - Test client registration and deregistration if you were to set up a dummy client within the test.
 }
