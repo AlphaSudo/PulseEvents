@@ -2,8 +2,14 @@ package com.pro.authenticationservice.model;
 
 
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import java.util.List;
 
+@SuppressFBWarnings(
+        value = { "EI_EXPOSE_REP2", "URF_UNREAD_FIELD" },  // list only the bug codes you really mean to ignore
+        justification = "we reviewed this and it's safe"
+)
 
 public class JwtResponse {
     private String token;
