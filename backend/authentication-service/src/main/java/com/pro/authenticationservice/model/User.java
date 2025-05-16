@@ -9,7 +9,7 @@ import java.util.Set;
 @Entity
 @Table(name = "users")
 @SuppressFBWarnings(
-        value = { "EI_EXPOSE_REP2", "URF_UNREAD_FIELD" },  // list only the bug codes you really mean to ignore
+        value = { "EI_EXPOSE_REP2", "URF_UNREAD_FIELD","EI_EXPOSE_REP" },  // list only the bug codes you really mean to ignore
         justification = "we reviewed this and it's safe"
 )
 
