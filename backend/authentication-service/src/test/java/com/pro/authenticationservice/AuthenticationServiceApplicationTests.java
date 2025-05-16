@@ -14,7 +14,9 @@ import org.springframework.test.context.TestPropertySource;
         "spring.datasource.driver-class-name=org.h2.Driver",
         "spring.jpa.hibernate.ddl-auto=create-drop",
         "spring.jpa.show-sql=false",
-        "jwt.secret=${JWT_SECRET}"
+        "jwt.secret=z4+W0v3h4ZqQS/sYQmFIX9aZZlI3Z0pQOxERa/NSnKI=",
+        "jwt.expiration-ms=3600000"
+
 })
 
 class AuthenticationServiceApplicationTests {
