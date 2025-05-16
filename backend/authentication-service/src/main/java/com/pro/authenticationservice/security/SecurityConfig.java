@@ -15,6 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.*;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 @Configuration
 @EnableMethodSecurity
@@ -22,6 +23,14 @@ public class SecurityConfig {
 
     private final UserDetailsService userDetailsService;
     private final JwtAuthenticationFilter jwtFilter;
+    /**
+     * We suppress EI_EXPOSE_REP2 here because JwtAuthenticationFilter is
+     * a Spring-managed singleton bean and we do not need to defensively copy it.
+     */
+    @SuppressFBWarnings(
+            value = "EI_EXPOSE_REP2",
+            justification = "JwtAuthenticationFilter is a framework-managed singleton; safe to hold reference"
+    )
 
     public SecurityConfig(UserDetailsService uds, JwtAuthenticationFilter filter) {
         this.userDetailsService = uds;

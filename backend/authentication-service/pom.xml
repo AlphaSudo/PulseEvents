@@ -103,7 +103,12 @@
             <scope>test</scope>
         </dependency>
 
-
+        <dependency>
+            <groupId>com.github.spotbugs</groupId>
+            <artifactId>spotbugs-annotations</artifactId>
+            <version>4.7.3</version>  <!-- match your SpotBugs plugin version -->
+            <scope>compile</scope>
+        </dependency>
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt</artifactId>
