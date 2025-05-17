@@ -1,0 +1,32 @@
+# Shared info (could be environment-specific)
+info:
+  app:
+    name: ${spring.application.name}
+    description: Eureka Discovery Server
+    version: @project.version@
+
+# Shared Eureka client configuration (for all services)
+eureka:
+  client:
+    service-url:
+      defaultZone: https://${eureka.instance.hostname}:${server.port}/eureka/
+
+# Shared actuator configuration
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus,loggers,metrics
+  endpoint:
+    health:
+      show-details: always
+      probes:
+        enabled: true
+
+# Shared logging levels
+logging:
+  level:
+    com.netflix.eureka: INFO
+    com.netflix.discovery: INFO
+    org.springframework.cloud: INFO
+    org.springframework.security: INFO

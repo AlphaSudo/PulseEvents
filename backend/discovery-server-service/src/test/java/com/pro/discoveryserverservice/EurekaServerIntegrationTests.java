@@ -17,6 +17,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource(properties = {
         "management.info.env.enabled=true",
+        "spring.cloud.config.enabled=false",
+        "management.endpoints.web.exposure.include=health,info",
         "logging.level.org.springframework.boot.actuate.info=DEBUG",
         "info.app.name=discovery-server-service",
         "info.app.description=Eureka Discovery Server (Local Development Setup)"

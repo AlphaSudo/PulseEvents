@@ -1,95 +1,28 @@
-# Server configuration
+# Server configuration (specific to this instance)
 server:
-  port: 8761 # Default Eureka port
+  port: 8761
 
-# Spring application configuration
+# Spring application name (required for all services)
 spring:
   application:
-    name: discovery-server-service # Service name registered in Eureka (if it were a client)
-  # Optional: Add application info
-info:
-  app:
-    name: ${spring.application.name}
-    description: Eureka Discovery Server (Local Development Setup)
-    version: @project.version@ # Injects Maven project version
-# Eureka server configuration
+    name: discovery-server-service
+  config:
+    import: "optional:configserver://localhost:8888"
+
+
+# Eureka server-specific behavior
 eureka:
   instance:
-    hostname: localhost # Hostname clients should use to contact this server
-    # Use IP address preferably if running in containers or cloud environments
-    # prefer-ip-address: true
+    hostname: localhost
   client:
-    # This instance is a server, so it should not register itself with Eureka
     register-with-eureka: false
-    # This instance is a server, so it should not fetch the registry from another Eureka server (in standalone mode)
     fetch-registry: false
-    service-url:
-      # URL for clients to register and fetch registry. In standalone mode, points to itself.
-      # For clustered setup, list all peer URLs here.
-      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
   server:
-    # Wait time for later sync attempts when the registry is empty (0 for faster startup in dev)
-    wait-time-in-ms-when-sync-empty: 0 # Use 0 for faster startup in local/dev
-    # Enable self-preservation mode (recommended for production resilience, can be disabled for simpler local testing if needed)
-    enable-self-preservation: true # Consider setting to false for very simple local scenarios if preferred
-    # Eviction interval timer task (how often to run the eviction task)
-    eviction-interval-timer-in-ms: 60000 # Default is 60 seconds
+    wait-time-in-ms-when-sync-empty: 0
+    enable-self-preservation: true
+    eviction-interval-timer-in-ms: 60000
 
-# Logging configuration
+# Local logging configuration
 logging:
   level:
-    # Set specific log levels
-    com.netflix.eureka: INFO
-    com.netflix.discovery: INFO
     com.pro.discoveryserverservice: DEBUG
-    org.springframework.cloud: INFO
-    org.springframework.security: INFO # Security logs can be set to INFO or WARN if not debugging security
-
-# Actuator endpoints configuration
-management:
-  endpoints:
-    web:
-      exposure:
-        # Expose common actuator endpoints (health, info, prometheus, loggers)
-        include: health,info,prometheus,loggers,metrics
-        # Exclude sensitive endpoints unless needed and secured
-        # exclude: env,beans
-  endpoint:
-    health:
-      # Show full health details (no authentication required with current security config)
-      show-details: always # Or 'never' if details are not needed for local setup
-      probes:
-        # Enable Kubernetes readiness and liveness probes
-        enabled: true
-
-
-# --- Profiles for Clustered Setup (can be kept for flexibility, but won't be active by default) ---
-# Example profile for a clustered setup (peer1)
----
-spring:
-  config:
-    activate:
-      on-profile: peer1
-eureka:
-  instance:
-    hostname: eureka-peer1 # Specific hostname for this peer
-  client:
-    service-url:
-      # Points to the other peer(s) in the cluster (assuming no security for peers either in this simplified model)
-      defaultZone: http://eureka-peer2:8762/eureka/
-
-# Example profile for a clustered setup (peer2)
----
-spring:
-  config:
-    activate:
-      on-profile: peer2
-server:
-  port: 8762 # Different port for the second peer
-eureka:
-  instance:
-    hostname: eureka-peer2 # Specific hostname for this peer
-  client:
-    service-url:
-      # Points to the other peer(s) in the cluster (assuming no security for peers either in this simplified model)
-      defaultZone: http://eureka-peer1:8761/eureka/

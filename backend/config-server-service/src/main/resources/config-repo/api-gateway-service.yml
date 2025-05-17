@@ -1,0 +1,40 @@
+
+
+spring:
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      globalcors:
+        corsConfigurations:
+          '[/**]': # note the quotes and the /** key
+            allowedOrigins: "https://localhost:3000"
+            allowedMethods: GET,POST,PUT,DELETE,OPTIONS
+            allowedHeaders: "*"
+            allowCredentials: true
+
+
+      routes:
+        - id: authentication-service
+          uri: lb://authentication-service
+          predicates:
+            - Path=/auth/**
+        - id: events-service
+          uri: lb://events-service
+          predicates:
+            - Path=/events/**
+        - id: booking-service
+          uri: lb://booking-service
+          predicates:
+            - Path=/booking/**
+  management:
+    endpoints:
+      web:
+        exposure:
+          include: health,info,metrics,loggers  # pick the ones you need
+    endpoint:
+      health:
+        show-details: always                   # optional: if you want full details
+    # base-path: /actuator # (defaults to /actuator)

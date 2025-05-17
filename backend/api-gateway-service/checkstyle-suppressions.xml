@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!DOCTYPE suppressions PUBLIC
+        "-//Checkstyle//DTD SuppressionFilter Configuration 1.2//EN"
+        "https://checkstyle.org/dtds/suppressions_1_2.dtd">
+<suppressions>
+    <suppress
+            checks="FinalClass"
+            files="[\\/]DiscoveryServerServiceApplication\.java$"/>
+    <!--
+        You can add more suppressions here if needed.
+        For example, to suppress FinalClass for all classes ending with 'Application.java':
+    <suppress
+        checks="FinalClass"
+        files=".*Application\.java$"/>
+    -->
+</suppressions>
