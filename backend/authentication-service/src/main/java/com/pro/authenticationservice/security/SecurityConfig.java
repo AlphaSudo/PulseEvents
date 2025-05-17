@@ -2,6 +2,8 @@ package com.pro.authenticationservice.security;
 
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,10 +19,14 @@ import org.springframework.security.web.*;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
+
+import static org.springframework.security.config.Customizer.withDefaults;
+
 @Configuration
 @EnableMethodSecurity
 public class SecurityConfig {
 
+    private static final Logger log = LoggerFactory.getLogger(SecurityConfig.class);
     private final UserDetailsService userDetailsService;
     private final JwtAuthenticationFilter jwtFilter;
     /**
@@ -46,10 +52,13 @@ public class SecurityConfig {
                         .requestMatchers("/auth/register", "/auth/login", "/auth/validate").permitAll()
                         .anyRequest().authenticated()
                 )
-                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
-
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                .cors(withDefaults())
+        // other security configurations
+        ;
         return http.build();
     }
+
 
     @Bean
     public AuthenticationManager authManager(HttpSecurity http) throws Exception {

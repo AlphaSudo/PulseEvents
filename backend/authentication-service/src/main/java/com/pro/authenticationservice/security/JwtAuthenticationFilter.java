@@ -31,17 +31,36 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             @NonNull HttpServletResponse response,
             @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
+        System.out.println("JwtAuthenticationFilter: Processing request to " + request.getRequestURI());
         String authHeader = request.getHeader("Authorization");
-        String token = (StringUtils.hasText(authHeader) && authHeader.startsWith("Bearer "))
-                ? authHeader.substring(7) : null;
+        System.out.println("Authorization header: " + (authHeader != null ? "present" : "not present"));
+
+        String token = null;
+        if (StringUtils.hasText(authHeader) && authHeader.startsWith("Bearer ")) {
+            token = authHeader.substring(7);
+            System.out.println("Token extracted from header");
+        } else {
+            System.out.println("No valid token found in header");
+        }
 
         if (token != null && jwtUtils.validateToken(token)) {
-            String username = jwtUtils.getUsername(token);
-            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-            UsernamePasswordAuthenticationToken authentication =
-                    new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+            System.out.println("Token is valid");
+            try {
+                String username = jwtUtils.getUsername(token);
+                System.out.println("Username from token: " + username);
+                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+                System.out.println("User details loaded: " + userDetails.getUsername());
+                UsernamePasswordAuthenticationToken authentication =
+                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+                System.out.println("Authentication set in SecurityContextHolder");
+            } catch (Exception e) {
+                System.out.println("Error during authentication: " + e.getMessage());
+                e.printStackTrace();
+            }
+        } else if (token != null) {
+            System.out.println("Token is not valid");
         }
         filterChain.doFilter(request, response);
     }

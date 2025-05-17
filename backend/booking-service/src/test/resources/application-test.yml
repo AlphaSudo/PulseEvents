@@ -1,0 +1,35 @@
+# Test Configuration
+spring:
+  application:
+    name: booking-service
+
+  config:
+    import: []
+  cloud:
+    config:
+      enabled: false
+
+  # H2 In-memory database for testing
+  datasource:
+    url: jdbc:h2:mem:testdb
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.H2Dialect
+
+# Disable Eureka client for tests
+eureka:
+  client:
+    enabled: false
+
+# Set test-specific properties
+server:
+  port: 8082

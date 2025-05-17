@@ -15,7 +15,7 @@ spring:
       # password: your‐pass
 app:
   cors:
-    allowed-origins: http://localhost:8080
+    allowed-origins: http://localhost:5173
 
 eureka:
   client:

@@ -51,27 +51,40 @@ public class AuthService {
         user.setUsername(req.getUsername());
         user.setPassword(encoder.encode(req.getPassword()));
         user.setRoles(Set.of(Role.ROLE_USER));
+        user.setEmail(req.getEmail());
         userRepo.save(user);
     }
 
 
     public JwtResponse login(LoginRequest req) {
-        var authToken = new UsernamePasswordAuthenticationToken(
-                req.getUsername(), req.getPassword());
-        var auth = authManager.authenticate(authToken);
+        System.out.println("Login attempt for user: " + req.getUsername());
+        try {
+            var authToken = new UsernamePasswordAuthenticationToken(
+                    req.getUsername(), req.getPassword());
+            System.out.println("Created authentication token");
+            var auth = authManager.authenticate(authToken);
+            System.out.println("Authentication successful");
 
-        var userDetails = (org.springframework.security.core.userdetails.User)
-                auth.getPrincipal();
+            var userDetails = (org.springframework.security.core.userdetails.User)
+                    auth.getPrincipal();
+            System.out.println("User details retrieved: " + userDetails.getUsername());
 
-        List<String> roles = userDetails.getAuthorities()
-                .stream()
-                .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.toList());
+            List<String> roles = userDetails.getAuthorities()
+                    .stream()
+                    .map(GrantedAuthority::getAuthority)
+                    .collect(Collectors.toList());
+            System.out.println("User roles: " + roles);
 
-        String token = jwtUtils.generateToken(userDetails.getUsername(), roles);
+            String token = jwtUtils.generateToken(userDetails.getUsername(), roles);
+            System.out.println("JWT token generated");
 
-        // JwtResponse(String token, String type, String username, List<String> roles)
-        return new JwtResponse(token, "Bearer", userDetails.getUsername(), roles);
+            // JwtResponse(String token, String type, String username, List<String> roles)
+            return new JwtResponse(token, "Bearer", userDetails.getUsername(), roles);
+        } catch (Exception e) {
+            System.out.println("Authentication failed: " + e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
     }
 
 

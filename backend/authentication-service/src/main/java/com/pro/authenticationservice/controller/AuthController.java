@@ -39,12 +39,20 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<JwtResponse> login(
             @NotNull @Valid @RequestBody LoginRequest req) {
-
-            JwtResponse resp = authSvc.login(req);
-            return ResponseEntity.ok()
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .body(resp);
-
+            System.out.println("AuthController: Login request received for user: " + req.getUsername());
+            try {
+                JwtResponse resp = authSvc.login(req);
+                System.out.println("AuthController: Login successful for user: " + resp.getUsername());
+                System.out.println("AuthController: Token generated: " + (resp.getToken() != null ? "yes" : "no"));
+                System.out.println("AuthController: User roles: " + resp.getRoles());
+                return ResponseEntity.ok()
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .body(resp);
+            } catch (Exception e) {
+                System.out.println("AuthController: Login failed: " + e.getMessage());
+                e.printStackTrace();
+                throw e;
+            }
     }
 
     @GetMapping("/validate")
