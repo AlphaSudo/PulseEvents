@@ -15,7 +15,8 @@ import org.springframework.test.context.TestPropertySource;
         "spring.jpa.hibernate.ddl-auto=create-drop",
         "spring.jpa.show-sql=false",
         "jwt.secret=z4+W0v3h4ZqQS/sYQmFIX9aZZlI3Z0pQOxERa/NSnKI=",
-        "jwt.expiration-ms=3600000"
+        "jwt.expiration-ms=3600000",
+        "app.cors.allowed-origins=https://localhost:3000"
 
 })
 
